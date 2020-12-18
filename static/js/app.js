@@ -1,12 +1,20 @@
 /* The following is an example on how you might structure your code.
 This is not the only way to complete this assignment.
 Feel free to disregard and create your own code */
-var metadata=[];
-var names=[];
-var samples=[];
 // Define a function that will create metadata for given sample
 function buildMetadata(sample) {
-
+    console.log("In Meta: ",sample);
+    var pbody=d3.select("#sample-metadata");
+    var panelRows=pbody.selectAll("h4");
+    panelRows.remove();
+    d3.json("samples.json").then(function(dataset) {
+        var metadata=dataset.metadata.filter(meta=>String(meta.id)===String(sample));
+        var demoinfo=d3.select("#sample-metadata");
+        Object.entries(metadata[0]).forEach(([key,value]) => {
+            var row=demoinfo.append("h4");
+            row.text(key+": "+String(value));
+        });
+    });
     // Read the json data
 
         // Parse and filter the data to get the sample's metadata
@@ -35,24 +43,11 @@ function init() {
     // Read json data
     var samplelist=d3.select("#selDataset");
     d3.json("samples.json").then(function(dataset) {
-        dataset.samples.forEach((sample) => {
-            var row=samplelist.append("option");
-            row.text(sample.id);
-            samples.push(sample);
-        });
-        dataset.metadata.forEach((meta) => {
-            metadata.push(meta);
-            console.log("Length: ",metadata.length);
-        });
         dataset.names.forEach((name) => {
-            names.push(name);
+            var row=samplelist.append("option");
+            row.text(name);
         });
-    });
-    console.log("Metadata:",metadata);
-    var demoinfo=d3.select("#sample-metadata");
-    Object.entries(metadata).forEach(([key,value]) => {
-        var row=demoinfo.append("h4");
-        row.text(key," ",string(value));
+        buildMetadata(dataset.names[0]);
     });
         // Parse and filter data to get sample names
 
@@ -63,6 +58,8 @@ function init() {
 
 function optionChanged(newSample){
 
+    console.log("newSample:",newSample);
+    buildMetadata(newSample);
     // Update metadata with newly selected sample
 
     // Update charts with newly selected sample
