@@ -37,25 +37,8 @@ function buildCharts(newSample) {
         initValues=initValues.sort(function(a,b){return a-b});
         console.log("initOtu", initOtu);
         console.log("initValues",initValues);
-
-        var trace = [{
-            x:initValues,
-            y:initOtu,
-            type:"bar",
-            orientation:'h'
-        }];
-
-        var layout = {
-            xaxis:{
-                showticklabels:true,
-                showgrid:true
-            },
-            yaxis:{
-                showticklabels:true,
-                showgrid:true
-            }
-        };
-        Plotly.restyle("bar",trace);      
+        Plotly.restyle("bar","x",[initValues]);
+        Plotly.restyle("bar","y",[initOtu]);      
     });
         // Parse and filter the data to get the sample's OTU data
         // Pay attention to what data is required for each chart
