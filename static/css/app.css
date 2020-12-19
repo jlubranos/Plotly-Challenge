@@ -1,5 +1,8 @@
+.row {
+    display:flex;
+}
 .panel {
-    width:225px;
+    width:auto;
 }
 .panel-title {
     text-align:center;
