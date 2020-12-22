@@ -1,7 +1,3 @@
-/* The following is an example on how you might structure your code.
-This is not the only way to complete this assignment.
-Feel free to disregard and create your own code */
-// Define a function that will create metadata for given sample
 function buildMetadata(sample) {
     var pbody=d3.select("#sample-metadata");
     var panelRows=pbody.selectAll("h5");
@@ -14,17 +10,10 @@ function buildMetadata(sample) {
             row.text(key+": "+String(value));
         });
     });
-    // Read the json data
-
-        // Parse and filter the data to get the sample's metadata
-
-        // Specify the location of the metadata and update it
 
 }
 
-// Define a function that will create charts for given sample
 function buildCharts(newSample) {
-    // Read the json data
     d3.json("samples.json").then(function(dataset) {
         var chartData=dataset.samples.filter(sample=>String(sample.id)===String(newSample));
         var metaData=dataset.metadata.filter(sample=>String(sample.id)===String(newSample));
@@ -89,16 +78,8 @@ function buildCharts(newSample) {
         }        
         Plotly.update("gauge",gaugeTrace,gaugeLayout);
     });
-        // Parse and filter the data to get the sample's OTU data
-        // Pay attention to what data is required for each chart
-
-        // Create bar chart in correct location
-
-        // Create bubble chart in correct location
-    
 }
 
-// Define function that will run on page load
 function init() {
 
     // Read json data
@@ -174,11 +155,9 @@ function init() {
             }
         }];
 
-//        var wfreq=dataset.metadata[0].wfreq;
-        wfreq=2;
+        var wfreq=dataset.metadata[0].wfreq;
         var degrees=wfreq*20;
         var radius=.3;
-//        var offset=(90-Math.abs(90-degrees))/90 * radius;
         var radians=degrees * (Math.PI/180);
         var x=-1*Math.cos(radians)*radius;
         var y=Math.sin(radians)*radius;
@@ -199,23 +178,12 @@ function init() {
     Plotly.plot('gauge',gaugeTrace,gaugeLayout,{staticPlot:true});
     
     });
-
-
-        // Parse and filter data to get sample names
-
-        // Add dropdown option for each sample
-
-    // Use first sample to build metadata and initial plots
 }
 
 function optionChanged(newSample){
 
     buildMetadata(newSample);
     buildCharts(newSample);
-    // Update metadata with newly selected sample
-
-    // Update charts with newly selected sample
-
 }
 
 // Initialize dashboard on page load
