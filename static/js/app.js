@@ -27,10 +27,12 @@ function buildCharts(newSample) {
     // Read the json data
     d3.json("samples.json").then(function(dataset) {
         var chartData=dataset.samples.filter(sample=>String(sample.id)===String(newSample));
-
+        var metaData=dataset.metadata.filter(sample=>String(sample.id)===String(newSample));
+ 
         var Otus=chartData[0].otu_ids;
         var Values=chartData[0].sample_values;
         var Labels=chartData[0].otu_labels;
+        var wfreq=metaData[0].wfreq;
 
         var Otu10=Otus.slice(0,10);
         var Value10=Values.slice(0,10);
@@ -49,6 +51,43 @@ function buildCharts(newSample) {
         Plotly.restyle("bubble","color",[Otus]);
         Plotly.restyle("bubble","size",[Values]);
 
+        var degrees=wfreq*20;
+        var radius=.3;
+        var radians=degrees * (Math.PI/180);
+        var x=-1*Math.cos(radians)*radius;
+        var y=Math.sin(radians)*radius;
+ 
+        var gaugeTrace = [{
+            type:'pie',
+            showlegend:false,
+            hole:0.7,
+            rotation:90,
+            values:[81/9,81/9,81/9,81/9,81/9,81/9,81/9,81/9,81/9,81],
+            text:['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+            direction:'clockwise',
+            textinfo:'text',
+            textposition:'inside',
+            marker: {
+                colors:['DarkRed','DarkGoldenRod','GoldenRod','Gold','Yellow','GreenYellow','YellowGreen','ForestGreen','DarkGreen','white'],
+                labels:['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+                hoverinfo:'label'
+            }
+        }];
+ 
+        var gaugeLayout = {
+            shapes: [{
+                type:'line',
+                x0:.5,
+                y0:.5,
+                x1:x+.5,
+                y1:y+.5,
+                line: {
+                    color:'black',
+                    width:3
+                }
+            }],
+        }        
+        Plotly.update("gauge",gaugeTrace,gaugeLayout);
     });
         // Parse and filter the data to get the sample's OTU data
         // Pay attention to what data is required for each chart
@@ -117,6 +156,48 @@ function init() {
             }
         }];
         Plotly.newPlot('bubble',bubbleTrace);
+
+        var gaugeTrace = [{
+            type:'pie',
+            showlegend:false,
+            hole:0.7,
+            rotation:90,
+            values:[81/9,81/9,81/9,81/9,81/9,81/9,81/9,81/9,81/9,81],
+            text:['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+            direction:'clockwise',
+            textinfo:'text',
+            textposition:'inside',
+            marker: {
+                colors:['DarkRed','DarkGoldenRod','GoldenRod','Gold','Yellow','GreenYellow','YellowGreen','ForestGreen','DarkGreen','white'],
+                labels:['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+                hoverinfo:'label'
+            }
+        }];
+
+//        var wfreq=dataset.metadata[0].wfreq;
+        wfreq=2;
+        var degrees=wfreq*20;
+        var radius=.3;
+//        var offset=(90-Math.abs(90-degrees))/90 * radius;
+        var radians=degrees * (Math.PI/180);
+        var x=-1*Math.cos(radians)*radius;
+        var y=Math.sin(radians)*radius;
+        var gaugeLayout = {
+            shapes: [{
+                type:'line',
+                x0:.5,
+                y0:.5,
+                x1:x+.5,
+                y1:y+.5,
+                line: {
+                    color:'black',
+                    width:3
+                }
+            }],
+        }
+    
+    Plotly.plot('gauge',gaugeTrace,gaugeLayout,{staticPlot:true});
+    
     });
 
 
