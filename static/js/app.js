@@ -94,14 +94,14 @@ function buildCharts(newSample) {
 function init() {
 
 // Read json data and create id option list
-
+    console.log("in init()");
     var samplelist=d3.select("#selDataset");
     d3.json("samples.json").then(function(dataset) {
         dataset.names.forEach((name) => {
             var row=samplelist.append("option");
             row.text(name);
         });
-
+    console.log("read json");
 // Initailize demographic info
 
         var initId=dataset.names[0];

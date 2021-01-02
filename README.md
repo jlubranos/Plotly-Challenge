@@ -26,4 +26,13 @@ dataset, which catalogs the microbes that colonize human navels.
 
 ## Installation
 
-> Goto Plotly-Challenge folder and run index.html.
+> Goto Plotly-Challenge folder.
+* Bring up git bash.
+* type source activate pythondata at command line.
+* type python -m http.server 8000 at command line.
+* open browser and type localhost:8000 in url section of page.
+* Belly Button Dashboard will be displayed and running locally.
+
+### See below for visual of the above instructions...
+
+![dashboard](images/dashboard.png)
