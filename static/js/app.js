@@ -14,10 +14,15 @@ function buildMetadata(sample) {
 }
 
 function buildCharts(newSample) {
+
+// Read json file and filter based on parameter newSample.
+// Collect all neccessary data to perform and process dashboard.
+
     d3.json("samples.json").then(function(dataset) {
         var chartData=dataset.samples.filter(sample=>String(sample.id)===String(newSample));
         var metaData=dataset.metadata.filter(sample=>String(sample.id)===String(newSample));
- 
+
+
         var Otus=chartData[0].otu_ids;
         var Values=chartData[0].sample_values;
         var Labels=chartData[0].otu_labels;
@@ -30,15 +35,21 @@ function buildCharts(newSample) {
         var Otu10=Otu10.map(otu=> "Otu "+otu);
         Value10=Value10.sort(function(a,b){return a-b});
 
+//restyle bar chart
+
         Plotly.restyle("bar","x",[Value10]);
         Plotly.restyle("bar","y",[Otu10]); 
         Plotly.restyle("bar","text",[Labels10]);
-        
+
+//restyle bubble chart
+
         Plotly.restyle("bubble","x",[Otus]);
         Plotly.restyle("bubble","y",[Values]);
         Plotly.restyle("bubble","text",[Labels]);
         Plotly.restyle("bubble","color",[Otus]);
         Plotly.restyle("bubble","size",[Values]);
+
+//update gauge chart
 
         var degrees=wfreq*20;
         var radius=.3;
@@ -82,7 +93,8 @@ function buildCharts(newSample) {
 
 function init() {
 
-    // Read json data
+// Read json data and create id option list
+
     var samplelist=d3.select("#selDataset");
     d3.json("samples.json").then(function(dataset) {
         dataset.names.forEach((name) => {
@@ -90,10 +102,14 @@ function init() {
             row.text(name);
         });
 
+// Initailize demographic info
+
         var initId=dataset.names[0];
         var initLabels=dataset.samples[0].otu_labels;
         var initOtu=dataset.samples[0].otu_ids;
         var initValues=dataset.samples[0].sample_values;
+
+// Display demograpic info based on argument passed
 
         buildMetadata(initId);
 
@@ -105,6 +121,8 @@ function init() {
         initOtus10=initOtus10.reverse();
         initValues10=initValues10.sort(function(a,b){return a-b});
         initLabels10=initLabels10.reverse();
+
+// Initailize Bar chart
 
         var trace = [{
             x:initValues10,
@@ -126,6 +144,8 @@ function init() {
         };
         Plotly.newPlot("bar",trace,layout);
 
+// Initialize Bubble chart
+
         var bubbleTrace = [{
             x:initOtu,
             y:initValues,
@@ -137,6 +157,11 @@ function init() {
             }
         }];
         Plotly.newPlot('bubble',bubbleTrace);
+
+
+// Gauge created by dividing graph into 9 equal sections for the top part of the pie.
+// and one section for the bottom half of the pie which is not shown according the the
+// colors designated for each section in the pie.
 
         var gaugeTrace = [{
             type:'pie',
@@ -154,6 +179,11 @@ function init() {
                 hoverinfo:'label'
             }
         }];
+
+// Each number on the chart represents 20 degrees... 180 divided 9 sections of graph.
+// Frequency then is calculated  with wfreq provided in dataset times 20 degress.
+// Radians are calculated and then the sine and cosine values are calculated from that.
+// These values are the end points of the needle to be drawn on the graph.
 
         var wfreq=dataset.metadata[0].wfreq;
         var degrees=wfreq*20;
@@ -181,6 +211,8 @@ function init() {
 }
 
 function optionChanged(newSample){
+
+// if new option entered then run buildMetadata and buildCharts routines.
 
     buildMetadata(newSample);
     buildCharts(newSample);
