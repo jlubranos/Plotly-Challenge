@@ -1,6 +1,6 @@
 # Plotly-Challenge
 
-![gauge](images\gauge.gif)
+![gauge](images/gauge.gif)
 
 ## How many times do you wash your bellybutton?
 # Belly Button Biodiversity Dashboard
